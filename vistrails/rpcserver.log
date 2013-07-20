@@ -1,0 +1,2 @@
+VistrailsRPC[8080] - 2013-06-05 10:50:33,918 ERROR    Following required parameters where missing from /Users/xiaoxiao/local/vistrail/vistrails/server.cfg config file: host, read_user, write_user, media_dir, script_file, permission_addresses 
+VistrailsRPC[8080] - 2013-06-05 10:50:33,919 ERROR    Config file /Users/xiaoxiao/local/vistrail/vistrails/server.cfg doesn't exist. Creating new file at /Users/xiaoxiao/local/vistrail/vistrails/server.cfg. Please populated it with the correct values and use it
