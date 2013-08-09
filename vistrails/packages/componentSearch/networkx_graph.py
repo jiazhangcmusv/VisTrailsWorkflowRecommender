@@ -12,6 +12,7 @@ import random
 
 import networkx as nx
 import matplotlib
+import matplotlib.pyplot
 
 from db.programmableweb.mongo_source import DataSource
 
@@ -42,12 +43,15 @@ class MplCanvas(FigureCanvas):
     def __init__(self):
         self.fig = Figure()
         self.ax = self.fig.add_subplot(111)
-        self.ax.hold(False)
+        # self.ax.hold(False)
         FigureCanvas.__init__(self, self.fig)
         FigureCanvas.setSizePolicy(self, QtGui.QSizePolicy.Expanding,QtGui.QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
     def draw_related_mashup(self, mashups, current_mashup=None, highlight_mashup=None):
+        """
+        Draw the realated mashup graph
+        """
         self.ax.clear()
         layout = {}
         g = nx.Graph()
@@ -74,12 +78,17 @@ class MplCanvas(FigureCanvas):
             node_id_end = node_map.get(current_mashup["id"])
             g.add_edge(node_id_start, node_id_end)
         try:
-            nx.draw(g, pos=layout, ax=self.ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
+            nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
         self.draw()
+        matplitlib.pyplot.show()
+
 
     def draw_related_api(self, apis, current_api=None, highlight_api=None):
+        """
+        Draw the realated api graph
+        """
         self.ax.clear()
         layout = {}
         g = nx.Graph()
@@ -112,13 +121,16 @@ class MplCanvas(FigureCanvas):
             with_labels = False
             if len(apis) < 20:
                 with_labels = True
-            nx.draw(g, pos=layout, labels=node_labels, ax=self.ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=with_labels)
+            nx.draw(g, pos=layout, labels=node_labels, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=with_labels)
         except Exception, e:
             print e
         self.draw()
+        matplotlib.pyplot.show()
+
 
 
     def draw_api(self, emphasize=False):
+
         self.ax.clear()
         layout = {}
         g = nx.Graph()
@@ -239,10 +251,12 @@ class matplotlibWidget(QtGui.QWidget):
         self.canvas.draw_related_mashup(mashups, current_mashup, highlight_mashup)
 
 class TestForm(QtGui.QMainWindow):
+    """
+    The form to draw the graph.
+    """
 
     def __init__(self, parent=None, f=QtCore.Qt.WindowFlags()):
         QtGui.QMainWindow.__init__(self, parent, f)
-#        self.createEventMap()
 
     def draw_api_to_api(self):
         self.widget = MatplotlibWidget(1)
@@ -253,76 +267,12 @@ class TestForm(QtGui.QMainWindow):
     def draw_member_mashup(self):
         self.widget = MatplotlibWidget(3)
 
-    def draw_graph(self):
-        return
-        self.widget = MatplotlibWidget()
-        self.setCentralWidget(self.widget)
-
-        layout = {}
-        g = nx.Graph()
-
-        pairs = data_source.pairs()
-        api_map = {}
-        mashup_map = {}
-        node_size = {}
-        node_color = {}
-        
-        all_apis = data_source.apis()
-        all_api_map = {}
-        for api in all_apis:
-            all_api_map[api["id"]] = api
-            
-        all_mashups = data_source.mashups()
-        all_mashup_map = {}
-        for mashup in all_mashups:
-            all_mashup_map[mashup["id"]] = mashup
-    
-        for pair in pairs:
-            api = all_api_map.get(pair["api"])
-            mashup = all_mashup_map.get(pair["mashup"])
-            api_id = None
-            mashup_id = None
-            if api:
-                api_id = api_map.get(pair["api"])
-                _id = api["id"]
-                if not api_id:
-                    api_map[_id] = True
-                    g.add_node(_id, api)
-                    layout[_id] = (random.random() , random.random())
-                    node_size[_id] = 50
-                    node_color[_id] = 0.5
-    
-            if mashup:
-                mashup_id = mashup_map.get(pair["mashup"])
-                _id = mashup["id"]
-                if not mashup_id:
-                    mashup_map[_id] = True
-                    g.add_node(_id, mashup)
-                    layout[_id] = (random.random() , random.random())
-                    node_size[_id] = 80
-                    node_color[_id] = 0.8
-                else:
-                    node_size[_id] = node_size[_id] + 40
-    
-            if api and mashup:
-                g.add_edge(api["id"], mashup["id"])
-    
-    
-        for v in g.nodes():
-            print v
-    
-        ax = self.widget.axes
-        ax.get_xaxis().set_visible(False) 
-        ax.get_yaxis().set_visible(False)
-        try:
-            nx.draw(g, pos=layout, ax=ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
-        except Exception, e:
-            print e
-        finally:
-            self.widget.draw()
-
-
 class MashUpInfoWidget(QtGui.QWidget):
+    """
+    This widget is used to display the information of certain mashup.
+    Jia asked me to display this when the mouse hover certain node.
+    It is kind of hard for me to figure this out with a version with less bugs.
+    """
     
     def __init__(self, mashup):
         QtGui.QWidget.__init__(self)
@@ -361,6 +311,8 @@ class MatplotlibWidget(QtGui.QWidget):
         QtGui.QWidget.__init__(self)
         
         l = QtGui.QVBoxLayout()
+
+        #Use number to decied which form to show.
         if num == 0:
             pass
         elif num == 1:
@@ -401,6 +353,9 @@ class MatplotlibWidget(QtGui.QWidget):
         self.detail.show()
 
 class TestFigureCanvas(FigureCanvas):
+    """
+    For testing....
+    """
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -430,6 +385,9 @@ class TestFigureCanvas(FigureCanvas):
 class MashupToMashupCanvas(TestFigureCanvas):
     
     def draw(self):
+        """
+        Canvas for drawing the relationship between mashups
+        """
         layout = {}
         g = nx.Graph()
 
@@ -457,13 +415,16 @@ class MashupToMashupCanvas(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
     
         try:
-            nx.draw(g, pos=layout, ax=self.axes, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
+            nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
 
 class ApiToApiCanvas(TestFigureCanvas):
     
     def draw(self):
+        """
+        Canvas for draw the relationship between apis
+        """
         mashup_map = data_source.mashup_with_apis()
         layout = {}
         g = nx.Graph()
@@ -491,7 +452,7 @@ class ApiToApiCanvas(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
 
         try:
-            nx.draw(g, pos=layout, ax=self.axes, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
+            nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
 
@@ -529,6 +490,6 @@ class MemberToMashup(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
     
         try:
-            nx.draw(g, pos=layout, ax=self.axes, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False, width=3)
+            nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False, width=3)
         except Exception, e:
             print e
