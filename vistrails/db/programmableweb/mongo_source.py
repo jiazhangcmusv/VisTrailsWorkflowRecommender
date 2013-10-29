@@ -24,14 +24,23 @@ class DataSource(object):
         return [member_mashup for member_mashup in member_mashups]
 
     def search_api(self, key):
+        """
+        Search api by key word
+        """
         apis = self.db.apis.find({"description": {"$regex": key}})
         return [api for api in apis]
 
     def search_mashup(self, key):
+        """
+        Search mashup by key word
+        """
         mashups = self.db.mashups.find({"description": {"$regex": key}})
         return [mashup for mashup in mashups]
 
     def mashup_with_apis(self):
+        """
+        All mashups with the apis they are using
+        """
         pairs = self.pairs()
         mashup_map = {}
         for pair in pairs:
@@ -41,6 +50,9 @@ class DataSource(object):
         return mashup_map
 
     def api_with_mashups(self):
+        """
+        All apis with the mashups which are used.
+        """
         pairs = self.pairs()
         api_map = {}
         for pair in pairs:
@@ -50,34 +62,49 @@ class DataSource(object):
         return api_map
 
     def apis(self):
+        """
+        All apis
+        """
         apis = self.db.apis.find()
         return [api for api in apis]
     
     def mashups(self):
+        """
+        All mashups
+        """
         mashups = self.db.mashups.find()
         return [mashup for mashup in mashups]
 
     def pairs(self):
+        """
+        All pairs.
+        A pair is entry indicating a mashup using a certain api.
+        """
         pairs = self.db.pairs.find()
         return [pair for pair in pairs]
     
-    def publications(self):
-        publications = self.db.publication.find()
-        return [publication for publication in publications]
-
     def api_by_id(self, _id):
+        """
+        Find api by id
+        """
         apis = self.db.apis.find({"id": _id})
         result = [api for api in apis]
         if result:
             return result[0]
 
     def mashup_by_id(self, _id):
+        """
+        Find mashup by id
+        """
         mashups = self.db.mashups.find({"id": _id})
         result = [mashup for mashup in mashups]
         if result:
             return result[0]
 
     def mashups_by_api(self, api):
+        """
+        Find mashups which use the given api
+        """
         pairs = self.db.pairs.find({"api": api["id"]})
         mashups = []
         for pair in pairs:
@@ -85,6 +112,9 @@ class DataSource(object):
         return mashups
 
     def apis_by_mashup(self, mashup):
+        """
+        Find the apis which is used by the given mashup
+        """
         pairs = self.db.pairs.find({"mashup": mashup["id"]})
         apis = []
         for pair in pairs:
@@ -95,18 +125,3 @@ class DataSource(object):
         apis = self.db.apis.find({"category": category})
         return [api for api in apis]
 
-    def get_publication_author_matrix(self):
-        publications = self.publications()
-        author_map = {}
-        author_count = 0
-        for (counter, publication) in enumerate(publications):
-            for author in publication["author"]:
-                if author_map.get(author) == None:
-                    author_map[author] = author_count
-                    author_count += 1
-        matrix = numpy.zeros((len(publications), len(author_map)))
-        for (counter, publication) in enumerate(publications):
-            for author in publication["author"]:
-                author_id = author_map.get(author)
-                matrix[counter][author_id] = 1
-        return matrix

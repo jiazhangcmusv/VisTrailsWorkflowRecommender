@@ -105,6 +105,9 @@ class ComponentSearchForm():
         self.data_source = DataSource()
         
     def table_clicked(self):
+        """
+        Click the table, the graph form may change according to the selection.
+        """
         model = self.table.selectionModel()
         indexes = model.selectedIndexes()
         for index in indexes:
@@ -187,17 +190,24 @@ class ComponentSearchForm():
         self.add_btn.show()
 
     def api_button_clicked(self):
+        
         self.graph_form.draw_api()
         self.graph_form.show()
-        
+        """
+        Trigger to search APIs
+        """
         apis = self.data_source.apis()
         key = str(self.textbox.toPlainText())
+        #Has key or not has key, it is different.
         if key:
             self.api_search_button_clicked()
         else:
             self._show_apis(apis)
 
     def mashups_button_clicked(self):
+        """
+        Trigger to search mashups
+        """
         self.graph_form.draw_mashup()
         self.graph_form.show()
 
@@ -208,6 +218,9 @@ class ComponentSearchForm():
             self._show_mashups(self.data_source.mashups())
 
     def api_search_button_clicked(self):
+        """
+        Search when no keyword
+        """
         self.highlighted_api = None
         self.highlighted_mashup = None
         key = str(self.textbox.toPlainText())
@@ -216,6 +229,9 @@ class ComponentSearchForm():
             self._show_apis(apis)
 
     def mashup_search_button_clicked(self):
+        """
+        Search when no keyword
+        """
         self.highlighted_api = None
         self.highlighted_mashup = None
         key = str(self.textbox.toPlainText())
@@ -224,6 +240,9 @@ class ComponentSearchForm():
             self._show_mashups(mashups)
     
     def add_new_api(self):
+        """
+        Add new api to the modules package.
+        """
         apis = self.data_source.apis()
         model = self.table.selectionModel()
         indexes = model.selectedIndexes()
