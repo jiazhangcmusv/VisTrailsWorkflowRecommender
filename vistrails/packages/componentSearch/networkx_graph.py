@@ -82,7 +82,7 @@ class MplCanvas(FigureCanvas):
         except Exception, e:
             print e
         self.draw()
-        matplitlib.pyplot.show()
+        matplotlib.pyplot.show()
 
 
     def draw_related_api(self, apis, current_api=None, highlight_api=None):
