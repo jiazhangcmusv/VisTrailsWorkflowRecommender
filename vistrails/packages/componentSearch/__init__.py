@@ -2,7 +2,7 @@ from component_search_form import ComponentSearchForm
 from networkx_graph import TestForm
 
 identifier = 'edu.cmu.sv.componentSearch'
-name = 'Component Search'
+name = 'Recommendation'
 version = '1.0.0'
 
 component_search_form = ComponentSearchForm()
@@ -18,5 +18,5 @@ def menu_items():
         component_search_form.show_main_window()
 
     lst = []
-    lst.append(("Show Search Form", show_search_form))
+    lst.append(("Start Recommendation Engine", show_search_form))
     return tuple(lst)

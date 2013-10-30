@@ -56,14 +56,19 @@ class ComponentSearchForm():
             self.widget = None;
         self.widget = QWidget()
         self.widget.setMinimumSize(800, 600)
-        btn_api = QtGui.QPushButton("Search Apis", self.widget)
+        btn_api = QtGui.QPushButton("Recommend Modules", self.widget)
         btn_api.move(30, 20)
 
-        btn_mashup = QtGui.QPushButton("Search Mashups", self.widget)
-        btn_mashup.move(150, 20)
+        btn_mashup = QtGui.QPushButton("Recommend Workflows", self.widget)
+        btn_mashup.move(200, 20)
+
+        self.textboxLabel = QLabel(self.widget)
+        self.textboxLabel.setText("Describe your goals:")
+        self.textboxLabel.move(35, 60)
+        self.textboxLabel.show
         
         self.textbox = QTextEdit(self.widget)
-        self.textbox.move(30, 60)
+        self.textbox.move(30, 80)
         self.textbox.setFixedWidth(300)
         self.textbox.setFixedHeight(28)
 
@@ -80,9 +85,9 @@ class ComponentSearchForm():
         
         self.add_btn = QPushButton(self.widget)
         self.add_btn.clicked.connect(self.add_new_api)
-        self.add_btn.setText("Add")
+        self.add_btn.setText("Add to Palette")
         self.add_btn.hide()
-        self.add_btn.move(700, 20)
+        self.add_btn.move(650, 20)
         
         self.recommendLabel = QLabel(self.widget)
         self.recommendLabel.setText("Also Used")
@@ -151,10 +156,15 @@ class ComponentSearchForm():
             model.setData(model.index(row, 3), QVariant(api['version']))
             row += 1
 
-        model.setHeaderData(0, Qt.Horizontal, QVariant("API"))
-        model.setHeaderData(1, Qt.Horizontal, QVariant("Protocols"))
+        model.setHeaderData(0, Qt.Horizontal, QVariant("Module"))
+        model.setHeaderData(1, Qt.Horizontal, QVariant("Protocol"))
         model.setHeaderData(2, Qt.Horizontal, QVariant("Provider"))
         model.setHeaderData(3, Qt.Horizontal, QVariant("Version"))
+
+#        model.setHeaderData(0, Qt.Horizontal, QVariant("API"))
+#        model.setHeaderData(1, Qt.Horizontal, QVariant("Protocols"))
+#        model.setHeaderData(2, Qt.Horizontal, QVariant("Provider"))
+#        model.setHeaderData(3, Qt.Horizontal, QVariant("Version"))
 
         self.table.setModel(model)
         self.table.resizeColumnsToContents()
@@ -180,10 +190,15 @@ class ComponentSearchForm():
             
             row += 1
         
-        model.setHeaderData(0, Qt.Horizontal, QVariant("Info"))
-        model.setHeaderData(1, Qt.Horizontal, QVariant("Title"))
-        model.setHeaderData(2, Qt.Horizontal, QVariant("self"))
-        model.setHeaderData(3, Qt.Horizontal, QVariant("Description"))
+        model.setHeaderData(0, Qt.Horizontal, QVariant("Workflow"))
+        model.setHeaderData(1, Qt.Horizontal, QVariant("Short Description"))
+        model.setHeaderData(2, Qt.Horizontal, QVariant("Provider"))
+        model.setHeaderData(3, Qt.Horizontal, QVariant("Detailed Info"))
+
+#        model.setHeaderData(0, Qt.Horizontal, QVariant("Info"))
+#        model.setHeaderData(1, Qt.Horizontal, QVariant("Title"))
+#        model.setHeaderData(2, Qt.Horizontal, QVariant("self"))
+#        model.setHeaderData(3, Qt.Horizontal, QVariant("Description"))
 
         self.table.setModel(model)
         self.table.resizeColumnsToContents()
