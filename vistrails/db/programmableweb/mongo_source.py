@@ -5,12 +5,19 @@ Created on Sep 30, 2012
 '''
 from pymongo import Connection
 import numpy
+from scipy.sparse import coo_matrix
 
 class DataSource(object):
     '''
     classdocs
     '''
     db = None
+    #Mashup x API. 0/1 for containment
+    Q_matrix = None
+    #Cols are terms in description, rows are API indices.
+    description_matrix = None
+    api_tag_to_index = {}
+    api_link_to_index = {}
 
     def __init__(self):
         '''
@@ -29,6 +36,23 @@ class DataSource(object):
         """
         apis = self.db.apis.find({"description": {"$regex": key}})
         return [api for api in apis]
+
+    def search_api_similarity(self, api):
+        """
+        Search for APIs using similarity and past history.
+        """
+        if self.description_matrix == None:
+            apis = self.db.apis.find()
+        
+#        if self.Q_matrix == None:
+#            mashups = self.db.mashups.find()
+#            row_ix_list = []
+#            col_ix_list = []
+#            data_list = []
+#            row_ix = 0
+
+
+        
 
     def search_mashup(self, key):
         """

@@ -205,12 +205,12 @@ class ComponentSearchForm():
         self.add_btn.show()
 
     def api_button_clicked(self):
-        
-        self.graph_form.draw_api()
-        self.graph_form.show()
         """
         Trigger to search APIs
-        """
+        """        
+        self.graph_form.draw_api()
+        self.graph_form.show()
+
         apis = self.data_source.apis()
         key = str(self.textbox.toPlainText())
         #Has key or not has key, it is different.
@@ -232,6 +232,7 @@ class ComponentSearchForm():
         else:
             self._show_mashups(self.data_source.mashups())
 
+    #Should probably refactor this into one method.
     def api_search_button_clicked(self):
         """
         Search when no keyword
@@ -326,6 +327,10 @@ class ComponentSearchForm():
             objs.append(mashup)
             for api in mashup["related_mashups"]:
                 objs.append(api)
+        #Combining similarity and related.
+        similarity = self.data_source.search_api_similarity(self.highlighted_api)
+        #Combining similarity and related.
+
         model = QStandardItemModel(len(objs), 5)
         for obj in objs:
             if obj.get('protocols'):
