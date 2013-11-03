@@ -6,6 +6,8 @@ Created on Sep 30, 2012
 from pymongo import Connection
 import numpy
 from scipy.sparse import coo_matrix
+import scipy as sp
+import string
 
 class DataSource(object):
     '''
@@ -18,6 +20,7 @@ class DataSource(object):
     description_matrix = None
     api_tag_to_index = {}
     api_link_to_index = {}
+    api_ix_to_link = []
 
     def __init__(self):
         '''
@@ -37,21 +40,53 @@ class DataSource(object):
         apis = self.db.apis.find({"description": {"$regex": key}})
         return [api for api in apis]
 
-    def search_api_similarity(self, api):
+    def search_api_similarity(self, selected_api, K = 10):
         """
         Search for APIs using similarity and past history.
         """
         if self.description_matrix == None:
             apis = self.db.apis.find()
+            tag_ix = 0
+            api_ix = 0
+            row_ix = []
+            col_ix = []
+            data = []
+            for api in apis:
+                tags = api['description'].encode('utf8').translate(string.maketrans("",""), string.punctuation).split(' ')
+#                tags =  api['tags']
+                link = api['link']
+                self.api_link_to_index[link] = api_ix
+                self.api_ix_to_link.append(link)
+                for tag in tags:
+                    if tag not in self.api_tag_to_index:
+                        self.api_tag_to_index[tag] = tag_ix
+                        tag_ix = tag_ix + 1
+                    col_ix.append(self.api_tag_to_index[tag])
+                    row_ix.append(api_ix)
+                    data.append(1)
+                api_ix = api_ix + 1
+            self.description_matrix = coo_matrix((data, (row_ix, col_ix)), shape=(api_ix, tag_ix)).tocsr()
+
+        #Create description vector for selected API
+        api_tag_ix_list = []
+        desc = selected_api['description'].encode('utf8').translate(string.maketrans("",""), string.punctuation).split(' ')
+        for tag in desc:
+            api_tag_ix_list.append(self.api_tag_to_index[tag])
+        n = len(api_tag_ix_list)
+        selected_api_vector = coo_matrix(([1]*n, (api_tag_ix_list, [0]*n)), shape=(len(self.api_tag_to_index),1)).tocsr()
         
-#        if self.Q_matrix == None:
-#            mashups = self.db.mashups.find()
-#            row_ix_list = []
-#            col_ix_list = []
-#            data_list = []
-#            row_ix = 0
-
-
+        metric_vector = self.description_matrix.dot(selected_api_vector).todense()
+        rankings = []
+        ix = 0
+        for similarity_metric in metric_vector:
+            rankings.append((float(similarity_metric[0,0]), self.api_ix_to_link[ix]))
+            ix = ix + 1
+        rankings.sort(reverse=True)
+        apis_to_return = []
+        for metric in rankings[0:K]:
+            api = self.db.apis.find({"link": {"$regex": metric[1]}})
+            apis_to_return.extend(api)
+        return apis_to_return
         
 
     def search_mashup(self, key):

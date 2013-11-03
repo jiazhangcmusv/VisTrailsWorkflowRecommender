@@ -328,7 +328,10 @@ class ComponentSearchForm():
             for api in mashup["related_mashups"]:
                 objs.append(api)
         #Combining similarity and related.
-        similarity = self.data_source.search_api_similarity(self.highlighted_api)
+        similar_apis = self.data_source.search_api_similarity(self.highlighted_api)
+        #return str(mashup['id'])[(len("http://www.programmableweb.com/mashup/")):]
+        objs.append({'id': "http://www.programmableweb.com/mashup/Using-Similarity-Metric"})
+        objs.extend(similar_apis)
         #Combining similarity and related.
 
         model = QStandardItemModel(len(objs), 5)
