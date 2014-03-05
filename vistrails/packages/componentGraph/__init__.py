@@ -14,7 +14,7 @@ def menu_items():
     test_form = TestForm()
 
     def show_test_form():
-
+        print 'test3'
         test_form.show()
         test_form.activateWindow()
         test_form.draw_graph()
@@ -43,5 +43,4 @@ def menu_items():
     lst.append(("Api to Api", show_api_form))
     lst.append(("Mashup to Mashup", show_mashup_form))
     lst.append(("Member Mashups", show_member_mashup_form))
-    
     return tuple(lst)
