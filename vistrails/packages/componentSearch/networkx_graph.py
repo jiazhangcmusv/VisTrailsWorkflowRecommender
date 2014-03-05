@@ -78,7 +78,8 @@ class MplCanvas(FigureCanvas):
             node_id_end = node_map.get(current_mashup["id"])
             g.add_edge(node_id_start, node_id_end)
         try:
-            nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
+            print 'graph1'
+            nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False, edge_color='y')
         except Exception, e:
             print e
         self.draw()
@@ -121,6 +122,7 @@ class MplCanvas(FigureCanvas):
             with_labels = False
             if len(apis) < 20:
                 with_labels = True
+            print 'graph2'
             nx.draw(g, pos=layout, labels=node_labels, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=with_labels)
         except Exception, e:
             print e
@@ -162,7 +164,8 @@ class MplCanvas(FigureCanvas):
 #                        node_size[node_id_end] = node_size[node_id_end] + 5
 
         try:
-            nx.draw(g, pos=layout, ax=self.ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
+            print 'graph3'
+            nx.draw(g, pos=layout, ax=self.ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False, edge_color='y')
         except Exception, e:
             print e
         self.draw()
@@ -202,8 +205,9 @@ class MplCanvas(FigureCanvas):
 #                        node_size[node_id_end] = node_size[node_id_end] + 5
     
         try:
-            nx.draw(g, pos=layout, ax=self.ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
-        except Exception, e:
+            print 'graph4'
+            nx.draw(g, pos=layout, ax=self.ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False, edge_color='y')
+        except Exception as e:
             print e
         self.draw()
 
@@ -221,6 +225,7 @@ class MplCanvas(FigureCanvas):
 
         pos=nx.spring_layout(G)
 
+        print 'graph5'
         nx.draw(G,pos,self.ax,node_size=1200,node_shape='o',node_color='0.75')
 
         self.draw()
@@ -415,6 +420,7 @@ class MashupToMashupCanvas(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
     
         try:
+            print 'graph6'
             nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
@@ -452,6 +458,7 @@ class ApiToApiCanvas(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
 
         try:
+            print 'graph7'
             nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
@@ -490,6 +497,7 @@ class MemberToMashup(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
     
         try:
+            print 'graph8'
             nx.draw(g, pos=layout, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False, width=3)
         except Exception, e:
             print e
