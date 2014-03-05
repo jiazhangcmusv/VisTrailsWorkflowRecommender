@@ -30,3 +30,6 @@ sudo apt-get install -y python-qt4 python-qt4-dev &&
 sudo apt-get install -y python-matplotlib &&
 sudo apt-get install -y python-suds &&
 sudo apt-get install -y python-support
+
+#This command will initialize the DB
+#mongorestore --host localhost --db PW_2012_09_02_09_03_35 --directoryperdb {data-dir} --drop 
