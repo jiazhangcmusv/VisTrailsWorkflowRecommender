@@ -43,7 +43,7 @@ class TestForm(QtGui.QMainWindow):
         self.widget = MatplotlibWidget(3)
 
     def draw_graph(self):
-        self.widget = MatplotlibWidget()
+        self.widget = MatplotlibWidget(1)
         self.setCentralWidget(self.widget)
 
         layout = {}
@@ -103,6 +103,7 @@ class TestForm(QtGui.QMainWindow):
         ax.get_xaxis().set_visible(False) 
         ax.get_yaxis().set_visible(False)
         try:
+            print 'test4'
             nx.draw(g, pos=layout, ax=ax, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
@@ -245,6 +246,7 @@ class MashupToMashupCanvas(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
     
         try:
+            print 'test1'
             nx.draw(g, pos=layout, ax=self.axes, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
@@ -279,6 +281,7 @@ class ApiToApiCanvas(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
 
         try:
+            print 'test2'
             nx.draw(g, pos=layout, ax=self.axes, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False)
         except Exception, e:
             print e
@@ -317,6 +320,7 @@ class MemberToMashup(TestFigureCanvas):
                         node_size[node_id_end] = node_size[node_id_end] + 5
     
         try:
+            print 'test3'
             nx.draw(g, pos=layout, ax=self.axes, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=False, width=3)
         except Exception, e:
             print e
