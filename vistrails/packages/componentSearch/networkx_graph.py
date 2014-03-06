@@ -121,6 +121,7 @@ class MplCanvas(FigureCanvas):
         try:
             with_labels = False
             if len(apis) < 20:
+                print 'testtesttest'
                 with_labels = True
             print 'graph2'
             nx.draw(g, pos=layout, labels=node_labels, node_size=[node_size[v] for v in g.nodes()], node_color=[node_color[v] for v in g.nodes()], with_labels=with_labels)
